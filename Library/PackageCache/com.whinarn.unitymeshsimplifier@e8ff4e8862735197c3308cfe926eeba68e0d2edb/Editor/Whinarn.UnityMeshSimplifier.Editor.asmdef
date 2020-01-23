@@ -1,0 +1,17 @@
+{
+    "name": "Whinarn.UnityMeshSimplifier.Editors",
+    "references": [
+        "Whinarn.UnityMeshSimplifier.Runtime"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

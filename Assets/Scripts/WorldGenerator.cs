@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EasyButtons;
 using System.Linq;
 
 public class WorldGenerator : MonoBehaviour
@@ -8,18 +9,27 @@ public class WorldGenerator : MonoBehaviour
     public int radius;
 
     public Material material;
+    public int seed;
+    public bool RandomizeSeed = true;
 
     private List<GameObject> cubes = new List<GameObject>();
 
+    [Button]
+    public void GeneratePlanet()
+    {
+        GenerateCubes();
+    }
 
     void Start()
     {
-        GenerateCubes();
+        //GenerateCubes();
     }
 
 
     private void GenerateCubes()
     {
+        if (RandomizeSeed) seed = Random.Range(0,10000);
+
         foreach(GameObject cube in cubes) 
         {
             StartCoroutine(Destroy(cube));
@@ -40,7 +50,7 @@ public class WorldGenerator : MonoBehaviour
             {
                 for (int z = 0; z < radius; z++)
                 {
-                    float noiseValue = Noise.Generate(x * .1f,y * .1f, z * .1f);
+                    float noiseValue = PlanetNoise.Generate(x * .1f + seed,y * .1f + seed, z * .1f + seed);
 
                     if (noiseValue >= .5 && (center - new Vector3(x, y, z)).sqrMagnitude < radius / 2 * radius / 2)
                     {
@@ -75,9 +85,13 @@ public class WorldGenerator : MonoBehaviour
             totalMeshCount++;
             GameObject obj = new GameObject("Procedural Mesh " + totalMeshCount);
             MeshFilter filter = obj.AddComponent<MeshFilter>();
+            filter.sharedMesh = new Mesh();
             MeshRenderer renderer = obj.AddComponent<MeshRenderer>();
             renderer.material = material;
-            filter.mesh.CombineMeshes(list.ToArray());
+            filter.sharedMesh.CombineMeshes(list.ToArray());
+
+
+
             cubes.Add(obj);
         }
 
@@ -91,5 +105,6 @@ public class WorldGenerator : MonoBehaviour
         yield return new WaitForEndOfFrame();
         DestroyImmediate(obj);
     }
+    
 
 }
